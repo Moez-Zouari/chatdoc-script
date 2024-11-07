@@ -1,0 +1,9 @@
+{
+    "python.analysis.extraPaths": [
+        "./AI System App/PDF/Add PDF",
+        "./AI System App/PDF/Delete PDF",
+        "./AI System App/PDF/Get PDF",
+        "./AI System App/Quota",
+        "./AI System App/Collection"
+    ]
+}
