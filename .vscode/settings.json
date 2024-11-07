@@ -4,6 +4,7 @@
         "./AI System App/PDF/Delete PDF",
         "./AI System App/PDF/Get PDF",
         "./AI System App/Quota",
-        "./AI System App/Collection"
+        "./AI System App/Collection",
+        "./Without API/read_questions"
     ]
 }
