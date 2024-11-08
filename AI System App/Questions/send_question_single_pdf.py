@@ -50,5 +50,5 @@ def create_question(question_text, document_ids):
 
 if __name__ == '__main__':
     question_text = "What is the name of the writer?"
-    document_ids = ["83e0973b-0778-4a6e-835a-cb22879b2912"]
+    document_ids = ["32af8457-b591-4f63-8467-2d0f422b975a"]
     create_question(question_text, document_ids)
