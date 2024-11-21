@@ -4,7 +4,7 @@ import json
 import requests
 import csv
 
-# Configuration de l'API
+# API Configuration
 api_url = "https://api.chatdoc.com/api/v2/questions/multi-documents"
 api_token = "ak-VStt1ft_v9Rfun_D2zXcmYpeZ8V76Mm1Ck1JOMxSGjc"
 
@@ -37,15 +37,15 @@ def process_response(response):
 
 def create_question(question_text, document_ids):
     if isinstance(document_ids, list) and document_ids:
-        upload_ids = document_ids  # Liste des IDs de documents
+        upload_ids = document_ids  # List of document IDs
     else:
         print("Invalid document IDs provided.")
         return
 
-    # Création du payload pour la requête
+    # Create payload for request
     payload = {
         'question': question_text,
-        'upload_ids': upload_ids  # Inclusion de tous les IDs de documents
+        'upload_ids': upload_ids  # Include all document IDs
     }
 
     response = send_request(payload)
@@ -55,9 +55,9 @@ def create_question(question_text, document_ids):
         return full_answer, question_id
     else:
         try:
-            print('Erreur de requête :', response.json())
+            print('Request error:', response.json())
         except ValueError:
-            print('Erreur de requête non JSON :', response.text)
+            print('Non-JSON request error:', response.text)
 
 def read_questions_in_file(md_file):
     with open(md_file, 'r', encoding='utf-8') as f:
@@ -97,7 +97,7 @@ def check_collections_in_csv(collection_names, document_folder):
         except FileNotFoundError:
             missing_collections.append(collection_name)
         except IOError as e:
-            print(f"Erreur de lecture du fichier CSV {collection_file_path}: {e}")
+            print(f"Error reading CSV file {collection_file_path}: {e}")
 
     return existing_collections, missing_collections, documents_id
 
@@ -124,27 +124,27 @@ def extract_collections_from_response(question_file_path):
 
     return collections
 
-def afficher_questions_lues(questions):
-    print("\n--- Lecture des questions ---\n")
-    print("Lecture des questions depuis les fichiers :")
+def display_read_questions(questions):
+    print("\n--- Reading Questions ---\n")
+    print("Reading questions from files:")
     for question_file, _ in questions:
         print(f"- {question_file}")
 
-def afficher_details(questions_data):
-    print("\n--- Détails des questions ---\n")
+def display_details(questions_data):
+    print("\n--- Question Details ---\n")
 
     for question_data in questions_data:
         file_name = os.path.basename(question_data['fichier'])
-        print(f"Question {question_data['numero']} : Fichier  {file_name}")
+        print(f"Question {question_data['numero']} : File {file_name}")
         print(f"- Question : {question_data['texte']}")
-        print(f"- Collections disponibles : {', '.join(question_data['collections'])}")
-        print(f"- Réponse : {question_data['reponse']}")
+        print(f"- Available Collections : {', '.join(question_data['collections'])}")
+        print(f"- Answer : {question_data['reponse']}")
         
-        # Séparateur entre chaque question
-        print("-" * 50+"\n")
+        # Separator between questions
+        print("-" * 50 + "\n")
 
         
-    print("\n--- Fin de l'affichage ---\n")
+    print("\n--- End of Display ---\n")
 
 def main():
     questions_folder = 'D:/AI Test System/Source Files'
@@ -154,10 +154,10 @@ def main():
     questions = read_questions_from_folder(questions_folder, file_pattern)
     questions_data = []
 
-    # Affichage des questions lues
-    afficher_questions_lues(questions)
+    # Display read questions
+    display_read_questions(questions)
     
-    print("\n--- Envoie des questions ---\n")
+    print("\n--- Sending Questions ---\n")
     for question_file_path, question_text in questions:
         question_number = os.path.basename(question_file_path).split('prompt.md')[0]
         
@@ -165,27 +165,27 @@ def main():
         
         existing_collections, missing_collections, documents_id = check_collections_in_csv(collection_names, document_folder)
         
-        # Préparation des données pour l'affichage détaillé
+        # Prepare data for detailed display
         question_data = {
             'numero': question_number,
             'fichier': question_file_path,
             'texte': question_text,
             'collections': collection_names,
-            'reponse': "En attente de la réponse..."  # Placeholder pour la réponse
+            'reponse': "Awaiting response..."  # Placeholder for the answer
         }
 
         questions_data.append(question_data)
 
         if documents_id:
-            print(f"\nEnvoi de la question : {question_text}")
+            print(f"\nSending question: {question_text}")
             full_answer, question_id = create_question(question_text, documents_id)
             question_data['reponse'] = full_answer
-            print(f"ID de la question : {question_id}\n")
+            print(f"Question ID: {question_id}\n")
         else:
-            print("Aucun document associé pour cette question.\n")
+            print("No associated document for this question.\n")
     
-    # Appel de la fonction d'affichage après avoir traité toutes les questions
-    afficher_details(questions_data)
+    # Display details after processing all questions
+    display_details(questions_data)
 
 if __name__ == '__main__':
     main()
